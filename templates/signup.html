@@ -1,0 +1,115 @@
+{% load staticfiles %}
+{% load i18n %}
+{% get_current_language as tr %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Social Network Template</title>
+
+    <!-- App Styling Bundle -->
+    <link href="{% static 'css/default.min.css' %}" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]><script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body class="login">
+{#    <div id="content">#}
+{#        <div class="container-fluid">#}
+{#            <div class="lock-container">#}
+{#                <h1>Account Access</h1>#}
+{#                <div class="panel panel-default text-center">#}
+{#                    {% if form.errors %}#}
+{#                        {{ form.errors }}#}
+{#                    {% endif %}#}
+{#                    <form id="login" method='POST'>#}
+{#                        {% csrf_token %}#}
+{#                        <div class="panel-body">#}
+{#                            <input class="form-control" type="text" name="username" id="id_username" placeholder="Username">#}
+{#                            <input class="form-control" type="password" name="password" id="id_password" placeholder="Enter Password">#}
+{#                            <input type="submit" class="btn btn-primary">#}
+{#                            <a href="#" class="forgot-password">Forgot password?</a>#}
+{#                        </div>#}
+{#                    {% if next %}#}
+{#                        <input type="hidden" name="next" value="{{ next }}">#}
+{#                    {% else %}#}
+{#                        <input type="hidden" name="next" value="/">#}
+{#                    {% endif %}#}
+{#                </form>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+
+<div class="container" style="text-align: center">
+        <h1>Kayıt Ol</h1>
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-gray">Hoş Geldin . . .</div>
+                    <div class="panel-body center">
+                        {% if form.errors %}
+                            <p>{{ form.errors }}</p>
+                        {% endif %}
+                        <form class="form-horizontal" role="form" method='POST'>
+                            {% csrf_token %}
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Kullanıcı Adı</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control"  name="username" id="id_username" placeholder="Kullanıcı Adı">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Mail</label>
+                                <div class="col-sm-9">
+                                    <input type="email" class="form-control" name="email" id="id_email" placeholder="Mail Adresi">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Ad</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="first_name" id="id_first_name" placeholder="Ad">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Soyad</label>
+                                <div class="col-sm-9">
+                                    <input type="text" class="form-control" name="last_name" id="id_last_name" placeholder="Soyad Adı">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputEmail3" class="col-sm-3 control-label">Parola</label>
+                                <div class="col-sm-9">
+                                    <input type="password" class="form-control" name="password" id="id_password" placeholder="Parola Adı">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="col-sm-offset-3 col-sm-6">
+                                    <button type="submit" class="btn btn-primary col-sm-12">Kayıt Ol</button>
+                                </div>
+                                <div class="col-sm-offset-0 col-sm-3">
+                                    <a href="/accounts/login/"><input class="btn btn-success col-sm-12" value="Giriş Yap"></a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<!-- Vendor Scripts Bundle -->
+<script src="{% static 'js/vendor.min.js' %}"></script>
+
+<!-- App Scripts Bundle -->
+<script src="{% static 'js/scripts.min.js' %}"></script>
+</html>

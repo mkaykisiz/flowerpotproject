@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -25,16 +26,22 @@ class UserDetails(models.Model):
     school = models.CharField(max_length=50, default='', null=False, blank=False)
     jobs = models.CharField(max_length=50, default='', null=False, blank=False)
     birthday = models.DateTimeField(null=True, blank=True)
-    been = models.ForeignKey(Cities, related_name='bean')
-    lives_in = models.ForeignKey(Cities, related_name='live_in')
-    share_group = models.ForeignKey(ShareGroup, related_name='share_group')
+    been = models.ForeignKey(Cities, related_name='bean', default=1)
+    lives_in = models.ForeignKey(Cities, related_name='live_in', default=1)
+    share_group = models.ForeignKey(ShareGroup, related_name='share_group', default=1)
     date = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.user.username
 
 
 class Follow(models.Model):
     follower = models.ForeignKey(User, related_name='follower')
     followed = models.ForeignKey(User, related_name='followed')
     date = models.DateTimeField(auto_now_add=True)
+
+    def __unicode__(self):
+        return self.follower.username+', '+self.followed.username+"\'i takip ediyor"
 
 
 class Message(models.Model):
@@ -43,10 +50,8 @@ class Message(models.Model):
     to = models.ForeignKey(User, related_name='to')
     date = models.DateTimeField(auto_now_add=True)
 
-
-class StatusPhotos(models.Model):
-    photo = models.ImageField(null=True, blank=True, upload_to="status_photos/")
-    date = models.DateTimeField(auto_now_add=True)
+    def __unicode__(self):
+        return self.send.username + ", " + self.to.username + " \'e Mesaj send" + "-" + str(self.date)
 
 
 class Status(models.Model):
@@ -57,7 +62,12 @@ class Status(models.Model):
     content = models.CharField(max_length=180, default='', null=True, blank=True)
     type = models.CharField(max_length=2, choices=STATUS_TYPE_CHOICES, default='ST')
     user = models.ForeignKey(User)
-    status_photos = models.ForeignKey(StatusPhotos)
+    date = models.DateTimeField(auto_now_add=True)
+
+
+class StatusPhotos(models.Model):
+    photo = models.ImageField(null=True, blank=True, upload_to="status_photos/")
+    status = models.ForeignKey(Status, default=1)
     date = models.DateTimeField(auto_now_add=True)
 
 
@@ -75,7 +85,9 @@ class StatusComment(models.Model):
 
 
 class Blog(models.Model):
+    title = models.CharField(max_length=100, null=False, blank=False, default='blog yazısı')
     content = models.CharField(max_length=1000, null=False, blank=False)
+    photo = models.ImageField(null=True, blank=True, upload_to="blog_photos/")
     user = models.ForeignKey(User)
     date = models.DateTimeField(auto_now_add=True)
 

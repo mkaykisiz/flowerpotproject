@@ -24,7 +24,7 @@ DEBUG = True
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,6 +48,15 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.contrib.messages.context_processors.messages",
+    "flowerpotproject.context_processors.base",
+)
+
 ROOT_URLCONF = 'flowerpotproject.urls'
 
 WSGI_APPLICATION = 'flowerpotproject.wsgi.application'
@@ -69,7 +78,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'tr-TR'
 
 TIME_ZONE = 'UTC'
 
@@ -100,4 +109,8 @@ MEDIA_ROOT = BASE_DIR + '/media'
 LOCALE_PATHS = (
     os.path.join(BASE_DIR, 'conf'),
     os.path.join(BASE_DIR, 'locale'),
+)
+TEMPLATE_DIRS = (
+    os.path.join(BASE_DIR,  'templates'),
+    os.path.join(BASE_DIR,  'flowerpot/templates'),
 )

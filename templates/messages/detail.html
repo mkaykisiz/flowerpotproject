@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load tag %}
+{% load staticfiles %}
+{% block head_block %}
+{#    <meta http-equiv="refresh" content="9">#}
+{% endblock %}
+
+{% block menu_block %}
+{% endblock %}
+
+{% block container_block %}
+    <div class="container">
+        <div class="media messages-container">
+            <div class="messages-list pull-left">
+                <div class="panel panel-default">
+                    <ul class="list-group">
+                        {% for message in message_list %}
+                        <li class="list-group-item">
+                            <a href="/messages/detail/{{ message.user.username }}">
+                                <div class="media">
+                                    <div class="media-object pull-left">
+                                        {% if message.profile_photo == '' %}
+                                            <img src="{% static 'images/default-avatar.png' %}" width="50" style="margin: 7px;" class="img-circle" />
+                                        {% else %}
+                                            <img src="/media/{{ message.profile_photo }}" width="50" style="margin: 7px;" class="img-circle" />
+                                        {% endif %}
+                                    </div>
+                                    <div class="media-body">
+                                        <span class="user">{{ message.user.first_name }} {{ message.user.last_name }}</span>
+                                        <div class="message">@{{ message.user.username }}</div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            <div class="media-body">
+                <div class="panel panel-default share">
+                    <form class="form-horizontal" id="new_message" method='POST'>
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <div class="input-group-btn">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-envelope"></i> Gönder
+                                </button>
+                            </div>
+
+                            <!-- /btn-group -->
+                            <input type="text" name="content" class="form-control share-text" placeholder="Mesaj Yaz"..." />
+                        </div>
+                    </form>
+                    <!-- /input-group -->
+                </div>
+                {% for message in my_messages_list %}
+                    {% if message.send.id != request.user.id %}
+                        <div class="media">
+                    <div class="pull-left media-object">
+                        <a href="/profile/{{ username }}/">
+                            {% if user_detail_active.profile_photo %}
+                                <img src="/media/{{ user_detail_active.profile_photo }}/" width="60" height="60" alt="" />
+                            {% else %}
+                                <img src="{% static 'images/default-avatar.png' %}" width="60" height="60" alt="" />
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="media-body message">
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-white">
+                                <div class="pull-right">
+                                    <small class="text-muted">{{ message.date }}</small>
+                                </div>
+                                <a href="/profile/{{ username }}/">{{ user_detail_active.user.first_name }} {{ user_detail_active.user.last_name }}</a>
+                            </div>
+                            <div class="panel-body">
+                                 {{ message.content }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="clerfix"></div>
+                    {% else %}
+                        <div class="media">
+                    <div class="pull-right media-object">
+                        <a href="/profile/{{ request.user.username }}/">
+                            {% if my_detail_active.profile_photo %}
+                                <img src="/media/{{ my_detail_active.profile_photo }}/" width="60" height="60" alt="" />
+                            {% else %}
+                                <img src="{% static 'images/default-avatar.png' %}" width="60" height="60" alt="" />
+                            {% endif %}
+                        </a>
+                    </div>
+                    <div class="media-body message">
+                        <div class="panel panel-default">
+                            <div class="panel-heading panel-heading-white">
+                                <div class="pull-right">
+                                    <small class="text-muted">{{ message.date }}</small>
+                                </div>
+                                <a href="/profile/{{ request.user.username }}/">{{ my_detail_active.user.first_name }} {{ my_detail_active.user.last_name }}</a>
+                            </div>
+                            <div class="panel-body">
+                                {{ message.content }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <div class="clerfix"></div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block script_block %}
+    <script type="text/javascript">
+    var a = '{{ my_messages_list }}';
+    console.log(a)
+    </script>
+{% endblock %}

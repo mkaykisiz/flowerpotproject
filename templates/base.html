@@ -1,0 +1,206 @@
+{% load staticfiles %}
+{% load i18n %}
+{% get_current_language as tr %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Social Network Template</title>
+
+    <!-- App Styling Bundle -->
+    <link href="{% static 'css/default.min.css' %}" rel="stylesheet">
+	<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Karla%7CMontserrat">
+	<link rel="stylesheet" href="{% static 'css/lightbox.css' %}">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]><script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+{% block head_block %}{% endblock %}
+</head>
+<body>
+
+
+
+
+{% block menu_block %}
+
+{% endblock %}
+    <!-- Fixed navbar -->
+    <div class="navbar navbar-main navbar-primary navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#main-nav">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a data-toggle="sidebar-chat" class="btn btn-link navbar-btn visible-xs"><i class="fa fa-comments"></i></a>
+                <a class="navbar-brand" href="/">Social</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="main-nav">
+                <!--<ul class="nav navbar-nav">
+                    <li><a href="../index.html">Themes</a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Pages <span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li class="dropdown-header">Public User Pages</li>
+                            <li><a href="user-public-timeline.html">Timeline</a>
+                            </li>
+                            <li><a href="user-public-profile.html">About</a>
+                            </li>
+                            <li><a href="user-public-users.html">Friends</a>
+                            </li>
+                            <li class="dropdown-header">Private User Pages</li>
+                            <li><a href="user-private-messages.html">Messages</a>
+                            </li>
+                            <li><a href="user-private-profile.html">Profile</a>
+                            </li>
+                            <li><a href="index.html">Timeline</a>
+                            </li>
+                            <li><a href="user-private-users.html">Friends</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="buttons.html" class="dropdown-toggle" data-toggle="dropdown">UI Components <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a href="buttons.html"><i class="fa fa-th"></i> Buttons</a>
+                            </li>
+                            <li>
+                                <a href="icons.html"><i class="fa fa-paint-brush"></i> Icons</a>
+                            </li>
+                            <li>
+                                <a href="progress.html"><i class="fa fa-tasks"></i> Progress</a>
+                            </li>
+                            <li>
+                                <a href="grid.html"><i class="fa fa-columns"></i> Grid</a>
+                            </li>
+                            <li>
+                                <a href="forms.html"><i class="fa fa-sliders"></i> Forms</a>
+                            </li>
+                            <li>
+                                <a href="tables.html"><i class="fa fa-table"></i> Tables</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li data-toggle="tooltip" data-placement="bottom" title="A few Color Examples. Download includes CSS Files for all color examples & the tools to Generate any Color combination. This Color-Switcher is for previewing purposes only.">
+                        <ul class="skins">
+                            <li><span data-skin="default" style="background: #16ae9f "></span>
+                            </li>
+                            <li><span data-skin="orange" style="background: #e74c3c "></span>
+                            </li>
+                            <li><span data-skin="blue" style="background: #4687ce "></span>
+                            </li>
+                            <li><span data-skin="purple" style="background: #af86b9 "></span>
+                            </li>
+                            <li><span data-skin="brown" style="background: #c3a961 "></span>
+                            </li>
+                            <li><span data-skin="default-nav-inverse" style="background: #242424 "></span>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>-->
+                <div class="col-sm-7 col-sm-offset-0" style="margin-top: 12px;">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Arama yapmak için...">
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Ara</button>
+                          </span>
+                    </div>
+                </div>
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden-xs">
+                        <a href="#" data-toggle="sidebar-chat">
+                            <i class="fa fa-comments"></i>
+                        </a>
+                    </li>
+
+                    <!-- User -->
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle user" data-toggle="dropdown">
+                            {% if active_user.profile_photo == '' %}
+                                <img src="{% static 'images/default-avatar.png' %}" alt="{{ active_user.user.first_name }}" class="img-circle" width="40" height="40"  /> {{ active_user.user.first_name }} <span class="caret"></span>
+                            {% else %}
+                                <img src="/media/{{ active_user.profile_photo }}" alt="{{ active_user.user.first_name }}" class="img-circle" width="40" height="40" /> {{ active_user.user.first_name }} <span class="caret"></span>
+                            {% endif %}
+                        </a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="/profile/{{ active_user.user.username }}/">Profile</a>
+                            </li>
+                            <li><a href="/messages/">Messages</a>
+                            </li>
+                            <li><a href="/accounts/logout/">Logout</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- /.navbar-collapse -->
+            </div>
+    </div>
+    <div class="sidebar right">
+        <div class="chat-search">
+            <input type="text" class="form-control" placeholder="Search" />
+        </div>
+        <ul class="chat-filter nav nav-pills ">
+            <li class="active"><a href="#" data-target="li">Tüm Mesajlar</a>
+            </li>
+        </ul>
+        <ul class="chat-contacts">
+            {% for message in message_list %}
+            <li class="online" data-user-id="{{ message.user.id }}">
+                <a href="/messages/detail/{{ message.user.username }}/">
+                    <div class="media">
+                        <div class="pull-left">
+                            {% if message.profile_photo == '' %}
+                                <img src="{% static 'images/default-avatar.png' %}" width="40" class="img-circle" />
+                            {% else %}
+                                <img src="/media/{{ message.profile_photo }}" width="40" class="img-circle" />
+                            {% endif %}
+                        </div>
+                        <div class="media-body">
+                            <div class="contact-name">{{ message.user.first_name }} {{ message.user.last_name }}</div>
+                            <small>{{ message.user.username }}</small>
+                        </div>
+                    </div>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <div class="chat-window-container"></div>
+{% block container_block %}{% endblock %}
+
+    <!-- Footer -->
+    <div class="footer">
+        Social Network Template &copy; Copyright Notice
+    </div>
+
+    <!-- // Footer -->
+
+<!-- Vendor Scripts Bundle --><script src="{% static 'js/vendor.min.js' %}"></script>
+
+    <!-- App Scripts Bundle -->
+    <script src="{% static 'js/scripts.min.js' %}"></script>
+    <script src="{% static 'js/jquery-1.11.0.min.js' %}"></script>
+	<script src="{% static 'js/lightbox.min.js' %}"></script>
+{% block script_block %}
+
+{% endblock %}
+</body>
+</html>

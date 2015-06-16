@@ -1,0 +1,235 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load tag %}
+{% load staticfiles %}
+
+{% block head_block %}{% endblock %}
+{% block menu_block %}{% endblock %}
+
+{% block container_block %}
+
+   <div class="container">
+        <div class="cover profile">
+            <div class="wrapper">
+                <div class="image">
+                    {% if user_detail.cover_photo %}
+                        <img src="/media/{{ user_detail.cover_photo }}" alt="people" />
+                    {% else %}
+                        <img src="{% static 'images/profile-cover.jpg' %}" alt="people" />
+                    {% endif %}
+                </div>
+                <ul class="friends">
+                {% for follower in follower_list_cover %}
+                    <li>
+                        <a href="/profile/{{ follower.user.username }}/">
+                            {% if follower.profile_photo == ''%}
+                            <img src="{% static 'images/default-avatar.png' %}" alt="people" class="img-responsive" style="height: 83px !important;">
+                            {% else %}
+                            <img src="/media/{{ follower.profile_photo }}" alt="people" class="img-responsive" style="height: 83px !important;">
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+                    <li><a href="#" class="group"><i class="fa fa-group"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="cover-info">
+                <div class="avatar">
+                    {% if user_detail.profile_photo == '' %}
+                        <img src="{% static 'images/default-avatar.png' %}" alt="people" class="img-responsive">
+                    {% else %}
+                        <img src="/media/{{ user_detail.profile_photo }}" alt="people" class="img-responsive">
+                    {% endif %}
+                </div>
+                <div class="name">
+                    <a href="/profile/{{ user.username }}/">
+                {{ user.first_name }}
+                {{ user.last_name }}
+            </a>
+                </div>
+                <ul class="cover-nav">
+                    <li><a href="/profile/{{ user.username }}/"><i class="fa fa-fw icon-ship-wheel"></i> Profil</a>
+                    </li>
+                    <li><a href="/profile/about/{{ user.username }}/"><i class="fa fa-fw icon-user-1"></i> Hakkında</a>
+                    </li>
+                    <li><a href="/profile/followers/{{ user.username }}/"><i class="fa fa-fw fa-users"></i> Takipçiler</a>
+                    </li>
+                    <li><a href="/profile/followeds/{{ user.username }}/"><i class="fa fa-fw fa-users"></i> Takip Ettikleri</a>
+                    </li>
+                    {% if request.user != user %}
+                    <li><a href="javascript:void(0)" id="{{ user.id }}" onclick="added_ticket_to_my_bag(this);"><i class="fa fa-fw fa-check-circle"></i>
+                        <output id="o{{ user.id }}">{% if is_followed_by_me %}{{ follow_status.1 }}{% else %}{{ follow_status.0 }}{% endif %}</output>
+                    </a>
+                    <li><a href="/messages/detail/{{ username }}"><i class="fa fa-fw fa-envelope"></i> Mesaj Gönder</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <ul class="nav nav-tabs" role="tablist">
+                <li class="active"><a href="#home" role="tab" data-toggle="tab"><i class="fa fa-picture-o"></i> Fotoğraflar</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade active in" id="home">
+                    {% for photo in status_photo_list %}
+                        <a href="/media/{{ photo.photo }}/" data-lightbox="image-1" data-title="">
+                    <img src="/media/{{ photo.photo }}/" alt="image" style="height: 83px !important;"/></a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+
+                <!--Friends -->
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-gray">
+                        <a href="/profile/edit/" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+                        <i class="fa fa-info-circle"></i> Hakkında
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled profile-about">
+                            <li>
+                                <div class="row">
+                                    <div class="col-sm-4"><span class="text-muted">Hakında</span>
+                                    </div>
+                                    <div class="col-sm-8">{{ user_detail.description }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-sm-4"><span class="text-muted">Doğum Tarihi</span>
+                                    </div>
+                                    <div class="col-sm-8">{{ user_detail.birthday|date }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-sm-4"><span class="text-muted">İş</span>
+                                    </div>
+                                    <div class="col-sm-8">{{ user_detail.jobs }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-sm-4"><span class="text-muted">Eğitim</span>
+                                    </div>
+                                    <div class="col-sm-8">{{ user_detail.school }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-sm-4"><span class="text-muted">website</span>
+                                    </div>
+                                    <div class="col-sm-8">{{ user_detail.website }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-sm-4"><span class="text-muted">Memleket</span>
+                                    </div>
+                                    <div class="col-sm-8">{{ user_detail.been }}</div>
+                                </div>
+                            </li>
+                            <li>
+                                <div class="row">
+                                    <div class="col-sm-4"><span class="text-muted">Yaşadığı yer</span>
+                                    </div>
+                                    <div class="col-sm-8">{{ user_detail.lives_in }}</div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <!--Friends -->
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-gray">
+                        <i class="icon-user-1"></i> Takipçiler
+                    </div>
+                    <ul class="list-unstyled friends-list">
+                        {% for follower in follower_list_about %}
+                        <li>
+                        <a href="/profile/{{ follower.user.username }}/">
+                            {% if follower.profile_photo == ''%}
+                            <img src="{% static 'images/default-avatar.png' %}" alt="people" class="img-responsive" style="height: 83px !important;">
+                            {% else %}
+                            <img src="/media/{{ follower.profile_photo }}" alt="people" class="img-responsive" style="height: 83px !important;">
+                            {% endif %}
+                        </a>
+                        </li>
+                        {% endfor %}
+
+                    </ul>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading panel-heading-gray">
+                <i class="fa fa-bookmark"></i> Blog yazıları
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    {% for blog in blog_list %}
+                    <div class="col-md-4">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <a href="/blog/{{ blog.id }}/" class="h5 margin-none">{{ blog.title }}</a>
+                                <div class="text-muted">
+                                    <small><i class="fa fa-calendar"></i> {{ blog.date|date }}</small>
+                                </div>
+                            </div>
+                            <a href="/blog/{{ blog.id }}/">
+                                {% if not blog.photo %}
+                                    <img src="{% static 'images/place1-full.jpg' %}" alt="image" class="img-responsive" />
+                                {% else %}
+                                    <center>
+                                        <img src="/media/{{ blog.photo }}/" alt="image" class="img-responsive" style="height: 231px !important;" />
+                                    </center>
+                                {% endif %}
+                            </a>
+                            <div class="panel-body">
+                                <p>{{ blog.content|content }}</p>
+                                <div>
+                                    <a href="/blog/{{ blog.id }}/" class="btn btn-primary btn-xs pull-right">Devam et</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script_block %}
+    <script type="text/javascript">
+        function added_ticket_to_my_bag(followed) {
+            $.ajax({
+                type: "POST",
+                url: "/add_followed/",
+                data: {followed: + followed.id },
+                success: okey(followed),
+                dataType: JSON
+            });
+        }
+        function okey(followed)
+        {
+            console.log('geldi tipini siktiğin');
+            var out = $("#o"+followed.id).html();
+            if (out == "{{ follow_status.0 }}"){
+            $("#o"+followed.id).html("{{ follow_status.1 }}");
+            }else{
+            $("#o"+followed.id).html("{{ follow_status.0 }}");
+            }
+        }
+</script>
+{% endblock %}
