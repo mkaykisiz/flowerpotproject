@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load tag %}
+{% load staticfiles %}
+{% block head_block %} {% endblock %}
+
+{% block menu_block %}
+{% endblock %}
+
+{% block container_block %}
+<style type="text/css">
+    .col-sm-9 {
+        float: none;
+    }
+</style>
+    <div class="container" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+    <div class="cover profile">
+            <div class="wrapper">
+                <div class="image">
+                    {% if user_detail.cover_photo %}
+                        <img src="/media/{{ user_detail.cover_photo }}" alt="people" />
+                    {% else %}
+                        <img src="{% static 'images/profile-cover.jpg' %}" alt="people" />
+                    {% endif %}
+                </div>
+                <ul class="friends">
+                {% for follower in follower_list_cover %}
+                    <li>
+                        <a href="/profile/{{ follower.user.username }}/">
+                            {% if follower.profile_photo == ''%}
+                            <img src="{% static 'images/default-avatar.png' %}" alt="people" class="img-responsive" style="height: 83px !important;">
+                            {% else %}
+                            <img src="/media/{{ follower.profile_photo }}" alt="people" class="img-responsive" style="height: 83px !important;">
+                            {% endif %}
+                        </a>
+                    </li>
+                {% endfor %}
+                    <li><a href="#" class="group"><i class="fa fa-group"></i></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="cover-info">
+                <div class="avatar">
+                    {% if user_detail.profile_photo == '' %}
+                        <img src="{% static 'images/default-avatar.png' %}" alt="people" class="img-responsive">
+                    {% else %}
+                        <img src="/media/{{ user_detail.profile_photo }}" alt="people" class="img-responsive">
+                    {% endif %}
+                </div>
+                <div class="name">
+                    <a href="/profile/{{ user.username }}/">
+                {{ user.first_name }}
+                {{ user.last_name }}
+                {% if user_detail.type == '0' %}
+                    ( Obez )
+                {% elif user_detail.type == '1' %}
+                    ( O Eskidendi )
+                {% elif user_detail.type == '2' %}
+                    ( Saç Stilisti )
+                {% elif user_detail.type == '3' %}
+                    ( Giyim Uzmanı )
+                {% elif user_detail.type == '4' %}
+                    ( Diyetisyen )
+                {% elif user_detail.type == '5' %}
+                    ( Giyim Firması )
+                {% endif %}
+            </a>
+                </div>
+                <ul class="cover-nav">
+                    <li><a href="/profile/{{ user.username }}/"><i class="fa fa-fw icon-ship-wheel"></i> Profil</a>
+                    </li>
+                    <li><a href="/profile/about/{{ user.username }}/"><i class="fa fa-fw icon-user-1"></i> Hakkında</a>
+                    </li>
+                    <li><a href="/profile/followers/{{ user.username }}/"><i class="fa fa-fw fa-users"></i> Takipçiler</a>
+                    </li>
+                    <li><a href="/profile/followeds/{{ user.username }}/"><i class="fa fa-fw fa-users"></i> Takip Ettikleri</a>
+                    </li>
+                    {% if request.user != user %}
+                    <li><a href="javascript:void(0)" id="{{ user.id }}" onclick="added_ticket_to_my_bag(this);"><i class="fa fa-fw fa-check-circle"></i>
+                        <output id="o{{ user.id }}">{% if is_followed_by_me %}{{ follow_status.1 }}{% else %}{{ follow_status.0 }}{% endif %}</output>
+                    </a>
+                    <li><a href="/messages/detail/{{ username }}"><i class="fa fa-fw fa-envelope"></i> Mesaj Gönder</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+
+    <center>
+<div class="panel-body" style="width: 800px;">
+<div class="row">
+    <div class="col-sm-12">
+        <div class="form-group" >
+            <div class="col-sm-12">
+                {% if blog.user.username == request.user.username %}
+                    <a href="/blog/edit/{{ blog.id }}/" ><button class="btn btn-primary">Düzenle</button></a>
+                    <a href="/blog/delete/{{ blog.id }}/" ><button class="btn btn-danger">Sil</button></a>
+                {% endif %}
+            </div>
+        </div>
+        <hr/>
+        <div class="form-group">
+            <div class="col-sm-12">
+                <h1>{{ blog.title }}</h1>
+                <label class="form-control col-sm-3 align-left">{{ blog.date|date }}</label>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                    <img class="col-sm-9" src="/media/{{ blog.photo }}" style="width: 300px; height: auto;" align="middle">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-12">
+                    <p align="justify">{{ blog.content }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+    </center>
+</div>
+    <div class="clearfix"></div>
+
+{% endblock %}
+{% block script_block %}{% endblock %}

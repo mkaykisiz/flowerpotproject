@@ -23,7 +23,7 @@
                                         {% if message.profile_photo == '' %}
                                             <img src="{% static 'images/default-avatar.png' %}" width="50" style="margin: 7px;" class="img-circle" />
                                         {% else %}
-                                            <img src="/media/{{ message.profile_photo }}" width="50" style="margin: 7px;" class="img-circle" />
+                                            <img src="/media/{{ message.profile_photo }}" width="50" height="50" style="margin: 7px;" class="img-circle" />
                                         {% endif %}
                                     </div>
                                     <div class="media-body">

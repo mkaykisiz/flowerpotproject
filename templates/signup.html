@@ -56,11 +56,13 @@
                 <div class="panel panel-default">
                     <div class="panel-heading panel-heading-gray">Hoş Geldin . . .</div>
                     <div class="panel-body center">
-                        {% if form.errors %}
-                            <p>{{ form.errors }}</p>
-                        {% endif %}
                         <form class="form-horizontal" role="form" method='POST'>
                             {% csrf_token %}
+
+                        {% if form.errors %}
+                            <p>{{ form.errors }}</p>
+                            <p>{{ form.ValidationError }}</p>
+                        {% endif %}
                             <div class="form-group">
                                 <label for="inputEmail3" class="col-sm-3 control-label">Kullanıcı Adı</label>
                                 <div class="col-sm-9">
@@ -96,7 +98,7 @@
                                     <button type="submit" class="btn btn-primary col-sm-12">Kayıt Ol</button>
                                 </div>
                                 <div class="col-sm-offset-0 col-sm-3">
-                                    <a href="/accounts/login/"><input class="btn btn-success col-sm-12" value="Giriş Yap"></a>
+                                    <a href="/accounts/login/"><input class="btn btn-success col-sm-12" type="button" value="Giriş Yap"></a>
                                 </div>
                             </div>
                         </form>

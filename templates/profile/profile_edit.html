@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load tag %}
+{% load staticfiles %}
+
+{% block head_block %} {% endblock %}
+
+{% block menu_block %}
+{% endblock %}
+
+{% block container_block %}
+
+<div class="panel-body">
+    {% if form_user.errors %}
+        {{ form_user.errors }}
+    {% endif %}
+        <form class="form-horizontal" id="form_user" method='POST' >
+            {% csrf_token %}
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">İsim :</label>
+                    <div class="col-sm-5    ">
+                        {{ form_user.first_name|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Soyisim :</label>
+                    <div class="col-sm-5">
+                        {{ form_user.last_name|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Kullanıcı Adı :</label>
+                    <div class="col-sm-5">
+                        {{ form_user.username|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Mail :</label>
+                    <div class="col-sm-5">
+                        {{ form_user.email|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Parola :</label>
+                    <div class="col-sm-5">
+                        {{ form_user.password|add_class:"form-control"}}
+                    </div>
+                </div>
+                {{ form_user.last_login }}
+                {{ form_user.is_active }}
+                {{ form_user.date_joined }}
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-3">
+                        <button type="submit" name="form_user" class="btn btn-default btn-block">Düzenle</button>
+                    </div>
+                </div>
+            </div>
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% else %}
+                <input type="hidden" name="next" value="/">
+            {% endif %}
+        </form>
+</div>
+    <hr/>
+    <hr/>
+<div class="panel-body">
+    {% if form_user_detail.errors %}
+        {{ form_user_detail.errors }}
+    {% endif %}
+        <form class="form-horizontal" id="form_user_detail" method='POST' enctype="multipart/form-data" >
+            {% csrf_token %}
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Profil Fotoğrafı :</label>
+                    <div class="col-sm-5 ">
+                        {{ form_user_detail.profile_photo|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Kapak Resimi :</label>
+                    <div class="col-sm-5">
+                        {{ form_user_detail.cover_photo|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Hakkında :</label>
+                    <div class="col-sm-5">
+                        {{ form_user_detail.description|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Website :</label>
+                    <div class="col-sm-5    ">
+                        {{ form_user_detail.website|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Okul :</label>
+                    <div class="col-sm-5">
+                        {{ form_user_detail.school|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">İş :</label>
+                    <div class="col-sm-5">
+                        {{ form_user_detail.jobs|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Doğum Tarihi :</label>
+                    <div class="col-sm-5    ">
+                            <input id="id_birthday" name="birthday" type="date" class="form-control"> Şu an:  {{ user_detail.birthday|date }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Memleketi :</label>
+                    <div class="col-sm-5">
+                        {{ form_user_detail.been|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Yaşadığı Yer :</label>
+                    <div class="col-sm-5">
+                        {{ form_user_detail.lives_in|add_class:"form-control" }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="input1" class="col-sm-3 control-label">Kullanıcı Tipi :</label>
+                    <div class="col-sm-5">
+                        {{ form_user_detail.type|add_class:"form-control" }}
+                    </div>
+                </div>
+                {{ form_user_detail.user }}
+                <div class="form-group">
+                    <div class="col-sm-offset-4 col-sm-3">
+                        <button type="submit" name="form_user_detail" class="btn btn-default btn-block">Düzenle</button>
+                    </div>
+                </div>
+            </div>
+            {% if next %}
+                <input type="hidden" name="next" value="{{ next }}">
+            {% else %}
+                <input type="hidden" name="next" value="/">
+            {% endif %}
+        </form>
+</div>
+    <div class="clearfix" style="height: 50px"></div>
+
+{% endblock %}
+{% block script_block %}
+    <script type="text/javascript">
+  $(function() {
+    $('#datetimepicker1').datetimepicker({
+      language: 'tr-TR'
+    });
+  });
+</script>
+{% endblock %}

@@ -29,6 +29,11 @@ def title(value):
         return str(value)[:40] + "..."
 
 
+@register.filter
+def decode(d, value):
+    return d.urlencode('unicode')
+
+
 class_re = re.compile(r'(?<=class=["\'])(.*)(?=["\'])')
 
 

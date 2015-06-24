@@ -46,6 +46,19 @@
                     <a href="/profile/{{ user.username }}/">
                 {{ user.first_name }}
                 {{ user.last_name }}
+                {% if user_detail.type == '0' %}
+                    ( Obez )
+                {% elif user_detail.type == '1' %}
+                    ( O Eskidendi )
+                {% elif user_detail.type == '2' %}
+                    ( Saç Stilisti )
+                {% elif user_detail.type == '3' %}
+                    ( Giyim Uzmanı )
+                {% elif user_detail.type == '4' %}
+                    ( Diyetisyen )
+                {% elif user_detail.type == '5' %}
+                    ( Giyim Firması )
+                {% endif %}
             </a>
                 </div>
                 <ul class="cover-nav">
@@ -76,8 +89,8 @@
             <div class="tab-content">
                 <div class="tab-pane fade active in" id="home">
                     {% for photo in status_photo_list %}
-                        <a href="/media/{{ photo.photo }}/" data-lightbox="image-1" data-title="">
-                    <img src="/media/{{ photo.photo }}/" alt="image" style="height: 83px !important;"/></a>
+                        <a href="/media/{{ photo.photo }}/" data-lightbox="image-1" data-title="" >
+                    <img src="/media/{{ photo.photo }}/" alt="image" style="margin-bottom: 4px !important;height: 83px !important;"/></a>
                     {% endfor %}
                 </div>
             </div>
@@ -88,7 +101,9 @@
                 <!--Friends -->
                 <div class="panel panel-default">
                     <div class="panel-heading panel-heading-gray">
-                        <a href="/profile/edit/" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil"></i></a>
+                        {% if username == request.user.username %}
+                        <a href="/profile_edit/" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil">  Düzenle</i></a>
+                        {% endif %}
                         <i class="fa fa-info-circle"></i> Hakkında
                     </div>
                     <div class="panel-body">
@@ -125,7 +140,7 @@
                                 <div class="row">
                                     <div class="col-sm-4"><span class="text-muted">website</span>
                                     </div>
-                                    <div class="col-sm-8">{{ user_detail.website }}</div>
+                                    <div class="col-sm-8"><a href="{{ user_detail.website }}" >{{ user_detail.website }}</a></div>
                                 </div>
                             </li>
                             <li>
@@ -171,8 +186,66 @@
                 </div>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-12">
+
+                <!--Friends -->
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-gray">
+                        <i class="fa fa-info-circle"></i> Kilo Değişim Grafiği
+                    </div>
+                    <div class="panel-body">
+
+                    <div id="chartContainer" style="width:100%; height:280px"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="group">
+            <div class="col-md-12">
+
+                <!--grup -->
+                <div class="panel panel-default">
+                    <div class="panel-heading panel-heading-gray">
+                        <i class="fa fa-info-circle"></i> Gruplar
+                    </div>
+                {% if username == request.user.username %}
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <form class="form-horizontal" id="share_goup" method='POST'>
+                                        {% csrf_token %}
+
+                                    <div class="form-group">
+                                        <div class="col-sm-4">
+                                            <input class="form-control" name="group_name">
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <button type="submit" name="share_group" class="btn btn-md btn-primary">Ekle</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    {% endif %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                {% for group in group_list %}
+                                    <a href="/group/{{ group.name|urlencode }}/">#{{ group.name }} </a>
+                                    {% if username == request.user.username %}
+                                    <a href="/leave/group/{{ group.name }}/"><i class="fa fa-close"></i> </a>
+                                    {% endif %}
+                                {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="panel panel-default">
             <div class="panel-heading panel-heading-gray">
+                <a href="/blog/new/" class="btn btn-white btn-xs pull-right"><i class="fa fa-pencil">  Blog Yazısı Ekle</i></a>
                 <i class="fa fa-bookmark"></i> Blog yazıları
             </div>
             <div class="panel-body">
@@ -207,11 +280,12 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
 {% endblock %}
 
 {% block script_block %}
-    <script type="text/javascript">
+<script type="text/javascript">
         function added_ticket_to_my_bag(followed) {
             $.ajax({
                 type: "POST",
@@ -231,5 +305,27 @@
             $("#o"+followed.id).html("{{ follow_status.0 }}");
             }
         }
+</script>
+<script type="text/javascript" src="/static/js/canvasjs.min.js"></script>
+<script type="text/javascript" src="/static/js/jquery-1.11.0.min.js"></script>
+<script type="text/javascript">
+window.onload = function () {
+	var chart = new CanvasJS.Chart("chartContainer", {
+		title: {
+			text: "Kilo Değişim Grafiği"
+		},
+		data: [
+		{
+			type: "spline",
+			dataPoints: [
+                {% for weight in weight_list %}
+				{ y: parseInt('{{weight.content}}') },
+                {% endfor %}
+			]
+		}
+		]
+	});
+	chart.render();
+}
 </script>
 {% endblock %}

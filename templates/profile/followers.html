@@ -47,6 +47,19 @@
                     <a href="/profile/{{ user.username }}/">
                 {{ user.first_name }}
                 {{ user.last_name }}
+                {% if user_detail.type == '0' %}
+                    ( Obez )
+                {% elif user_detail.type == '1' %}
+                    ( O Eskidendi )
+                {% elif user_detail.type == '2' %}
+                    ( Saç Stilisti )
+                {% elif user_detail.type == '3' %}
+                    ( Giyim Uzmanı )
+                {% elif user_detail.type == '4' %}
+                    ( Diyetisyen )
+                {% elif user_detail.type == '5' %}
+                    ( Giyim Firması )
+                {% endif %}
             </a>
                 </div>
                 <ul class="cover-nav">
@@ -81,7 +94,19 @@
                             <img src="/media/{{ follower.0.profile_photo }}" style="width: 80px !important;height: 80px !important;" alt="people" class="media-object img-circle pull-left" />
                             {% endif %}
                             <div class="media-body">
-                                <a href="/profile/{{ follower.0.user.username }}/" class="username">{{ follower.0.user.username }}</a>
+                                <a href="/profile/{{ follower.0.user.username }}/" class="username">{{ follower.0.user.username }} {% if user_detail.type == '0' %}
+                    ( Obez )
+                {% elif follower.0.type == '1' %}
+                    ( O Eskidendi )
+                {% elif follower.0.type == '2' %}
+                    ( Saç Stilisti )
+                {% elif follower.0.type == '3' %}
+                    ( Giyim Uzmanı )
+                {% elif follower.0.type == '4' %}
+                    ( Diyetisyen )
+                {% elif follower.0.type == '5' %}
+                    ( Giyim Firması )
+                {% endif %}</a>
                                 <div class="profile-icons">
                                     <span><i class="fa fa-users"></i> {{ follower.3 }}</span> <span><i class="fa fa-photo"></i> {{ follower.2 }}</span>
                                 </div>
@@ -106,13 +131,7 @@
                     {% endif %}
                     <div class="panel-footer">
                         <a href="javascript:void(0)" id="{{ follower.0.user.id }}" onclick="added_ticket_to_my_bag(this);" class="btn btn-default btn-sm">
-                            <output id="o{{ follower.0.user.id }}">
-                                {% if follower.4 %}
-                                Takibi Bırak
-                                {% else %}
-                                Takip Et
-                                {% endif %}
-                            </output>
+                            <output id="o{{ follower.0.user.id }}">{% if follower.4 %}{{ follow_status.1 }}{% else %}{{ follow_status.0 }}{% endif %}</output>
                         </a>
                     </div>
                 </div>

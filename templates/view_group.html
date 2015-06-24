@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load tag %}
+{% load staticfiles %}
+
+{% block head_block %}{% endblock %}
+{% block menu_block %}{% endblock %}
+
+{% block container_block %}
+{% if is_permission %}
+    <div class="container" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+
+        <div class="timeline row" data-toggle="gridalicious">
+                <div class="timeline-block">
+                    <div class="panel panel-default share">
+                        <div class="panel-heading panel-heading-gray title">
+                            Bizimle paylaş
+                        </div>
+                        <form class="form-horizontal" id="status_form" method='POST' enctype="multipart/form-data" >
+                            {% csrf_token %}
+                                <div class="panel-body">
+                                    <textarea name="status" class="form-control share-text" rows="3" placeholder="Durum yada kilo paylaş...
+ör; kilo=92" style="max-width: 338px;" maxlength="180"></textarea>
+                                </div>
+                                <div class="panel-footer share-buttons">
+                                    <a href="#" >
+                                        <div id="file"><i class="fa fa-photo"></i></div>
+                                        <input type="file" name="file" multiple accept="image/x-png, image/gif, image/jpeg"/>
+                                    </a>
+                                    <button type="submit" name="status_submit" class="btn btn-primary btn-xs pull-right display-none" href="#">Paylaş</button>
+                                </div>
+                        </form>
+                    </div>
+                </div>
+        {% for status_information in status_all_list %}
+            <div class="timeline-block" id="{{ status_information.0.id }}">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <div class="media">
+                            <a href="/profile/{{ status_information.4.user.username }}/" class="pull-left">
+                                {% if status_information.4.profile_photo %}
+                                <img src="/media/{{ status_information.4.profile_photo }}/" class="media-object" style="height: 50px !important;">
+                                {% else %}
+                                    <img src="{% static 'images/default-avatar.png' %}" class="media-object" style="height: 50px !important;">
+                                {% endif %}
+                            </a>
+                            <div class="media-body">
+                                {%  if request.user == status_information.4.user %}
+                                <a href="/group_status/delete/{{ status_information.0.id }}/" class="pull-right text-muted"><i class="fa-close fa fa-2x "></i></a>
+                                {% endif %}
+                                <a href="/profile/{{ status_information.4.user.username }}/">{{ status_information.4.user.username }}</a>
+                                <span>{{ status_information.0.date|date }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="panel-body">
+                        <p>{{ status_information.0.content }}</p>
+                        <div class="timeline-added-images">
+                            {% for status_photo_item in status_information.1 %}
+                                <a href="/media/{{ status_photo_item.photo }}/" data-lightbox="image-1" data-title="">
+                            <img src="/media/{{ status_photo_item.photo }}/" style="width: 133px !important; margin-bottom: 4px;">
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="view-all-comments"><a href="#{{ status_information.0.id }}"><i class="fa fa-comments-o"></i> {{ status_information.2|length }} yorum</a></div>
+                    <ul class="comments">
+                        {% for comment in status_information.2 %}
+                        <li>
+                            <div class="media">
+                                <a href="/profile/{{ comment.0.user.username }}/" class="pull-left">
+                                    {% if comment.1.profile_photo %}
+                                        <img src="/media/{{ comment.1.profile_photo }}/" class="media-object" style="height: 50px !important;">
+                                    {% else %}
+                                        <img src="{% static 'images/default-avatar.png' %}" class="media-object" style="height: 50px !important;">
+                                    {% endif %}
+                                </a>
+                                <div class="media-body">
+                                    <a href="/profile/{{ comment.0.user.username }}/" class="comment-author">{{ comment.0.user.username }}</a>
+                                    <span>{{ comment.0.content }}</span>
+                                    {%  if request.user == comment.0.user or request.user == status_information.4.user %}
+                                    <a href="/group_status_comment/delete/{{ comment.0.id }}/" class="pull-right text-muted"><i class="fa-close fa fa-x "></i></a>
+                                    {% endif %}
+                                    <div class="comment-date">{{ comment.0.date|date }}</div>
+                                </div>
+                            </div>
+                        </li>
+                            {% endfor %}
+                        <li class="comment-form">
+                            <form class="form-horizontal" id="status{{ status_information.0.id }}" method='POST' enctype="multipart/form-data" >
+                                <div class="input-group">
+                                    <input type="text" class="form-control" name="comment" id="{{ status_information.0.id }}" />
+                                    <input type="hidden" class="form-control" hidden="hidden" name="status_comment" value="{{ status_information.0.id }}" />
+                                    <span class="input-group-addon">
+                                       <a href="#" name="comment_submit" onclick="document.forms['status{{ status_information.0.id }}'].submit();return false;"><i class="fa fa-comment"></i></a>
+                                    </span>
+                                </div>
+                            </form>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+    </div>
+{% else %}
+    <p> Erişim Yetkiniz Bulunmamktadır.</p>
+{% endif %}
+{% endblock %}
+
+{% block script_block %}
+    <script type="text/javascript">
+        function added_ticket_to_my_bag(followed) {
+            $.ajax({
+                type: "POST",
+                url: "/add_followed/",
+                data: {followed: + followed.id },
+                success: okey(followed),
+                dataType: JSON
+            });
+        }
+        function okey(followed)
+        {
+            console.log('geldi tipini siktiğin');
+            var out = $("#o"+followed.id).html();
+            if (out == "{{ follow_status.0 }}"){
+            $("#o"+followed.id).html("{{ follow_status.1 }}");
+            }else{
+            $("#o"+followed.id).html("{{ follow_status.0 }}");
+            }
+        }
+
+    var wrapper = $('<div/>').css({height:0,width:0,'overflow':'hidden','margin-top':'-10px'});
+    var fileInput = $(':file').wrap(wrapper);
+
+    fileInput.change(function(){
+        $this = $(this);
+{#        $('#file').text($this.val());#}
+    });
+
+    $('#file').click(function(){
+        fileInput.click();
+    }).show();
+</script>
+{% endblock %}

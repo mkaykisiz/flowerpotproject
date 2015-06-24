@@ -17,8 +17,22 @@ class ShareGroup(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-class UserDetails(models.Model):
+class UserAndShareGroup(models.Model):
     user = models.ForeignKey(User)
+    share_group = models.ForeignKey(ShareGroup)
+
+
+class UserDetails(models.Model):
+    USER_TYPE = (
+        (u'0', 'Obez'),
+        (u'1', 'O Eskidendi'),
+        (u'2', 'Saç Stilisti'),
+        (u'3', 'Giyim Uzmanı'),
+        (u'4', 'Diyetisyen'),
+        (u'5', 'Giyim Firması'),
+    )
+    user = models.ForeignKey(User)
+    type = models.CharField(max_length=1, choices=USER_TYPE, default='0')
     profile_photo = models.ImageField(null=True, blank=True, upload_to="profile_photos/")
     cover_photo = models.ImageField(null=True, blank=True, upload_to="cover_photos/")
     description = models.CharField(max_length=500, default='', null=False, blank=False)
@@ -28,7 +42,6 @@ class UserDetails(models.Model):
     birthday = models.DateTimeField(null=True, blank=True)
     been = models.ForeignKey(Cities, related_name='bean', default=1)
     lives_in = models.ForeignKey(Cities, related_name='live_in', default=1)
-    share_group = models.ForeignKey(ShareGroup, related_name='share_group', default=1)
     date = models.DateTimeField(auto_now_add=True)
 
     def __unicode__(self):
@@ -105,16 +118,16 @@ class BlogComment(models.Model):
     date = models.DateTimeField(auto_now_add=True)
 
 
-class ShareGroupStatusPhotos(models.Model):
-    photo = models.ImageField(null=True, blank=True, upload_to="group_status_photos/")
-    date = models.DateTimeField(auto_now_add=True)
-
-
 class ShareGroupStatus(models.Model):
     content = models.CharField(max_length=180, default='', null=True, blank=True)
     user = models.ForeignKey(User)
     share_group = models.ForeignKey(ShareGroup)
-    status_photos = models.ForeignKey(ShareGroupStatusPhotos)
+    date = models.DateTimeField(auto_now_add=True)
+
+
+class ShareGroupStatusPhotos(models.Model):
+    share_group_status = models.ForeignKey(ShareGroupStatus, default=1)
+    photo = models.ImageField(null=True, blank=True, upload_to="group_status_photos/")
     date = models.DateTimeField(auto_now_add=True)
 
 

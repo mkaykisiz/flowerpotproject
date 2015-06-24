@@ -1,0 +1,86 @@
+
+{% extends "base.html" %}
+{% load i18n %}
+{% load tag %}
+{% load staticfiles %}
+{% block head_block %} {% endblock %}
+
+{% block menu_block %}
+{% endblock %}
+
+{% block container_block %}
+       <div class="container">
+        <div class="timeline row" data-toggle="gridalicious">
+            {% if all_follower_list %}
+            {% for follower in all_follower_list %}
+            <div class="timeline-block">
+                <div class="panel panel-default user-box">
+                    <div class="panel-body">
+                        <div class="media">
+                            {% if follower.0.profile_photo == '' %}
+                            <img src="{% static 'images/default-avatar.png' %}" style="width: 80px !important;height: 80px !important;" alt="people" class="media-object img-circle pull-left" />
+                            {% else %}
+                            <img src="/media/{{ follower.0.profile_photo }}" style="width: 80px !important;height: 80px !important;" alt="people" class="media-object img-circle pull-left" />
+                            {% endif %}
+                            <div class="media-body">
+                                <a href="/profile/{{ follower.0.user.username }}/" class="username">{{ follower.0.user.username }}</a>
+                                <div class="profile-icons">
+                                    <span><i class="fa fa-users"></i> {{ follower.2 }}</span> <span><i class="fa fa-photo"></i> {{ follower.1 }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% if follower.3 %}
+                    <div class="panel-body bordered">
+                        <p class="common-friends">Takipçiler</p>
+                        <div class="user-friend-list">
+                            {%  for follow in follower.3 %}
+                            <a href="/profile/{{ follow.user.username }}/">
+                                {% if follow.profile_photo == '' %}
+                                <img src="{% static 'images/default-avatar.png' %}" style="width: 50px !important;height: 50px !important;" alt="{{ follow.user.username }}" class="img-circle" />
+                                {% else %}
+                                <img src="/media/{{ follow.profile_photo }}" style="width: 50px !important;height: 50px !important;" alt="{{ follow.user.username }}" class="img-circle" />
+                                {% endif %}
+                            </a>
+                                {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div class="panel-footer">
+                        <a href="javascript:void(0)" id="{{ follower.0.user.id }}" onclick="added_ticket_to_my_bag(this);" class="btn btn-default btn-sm">
+                            <output id="o{{ follower.0.user.id }}">{% if follower.4 %}{{ follow_status.1 }}{% else %}{{ follow_status.0 }}{% endif %}</output>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+                <p style="text-align: center">Herhangi bir kayıt bulunamadı</p>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+{% block script_block %}
+    <script type="text/javascript">
+        function added_ticket_to_my_bag(followed) {
+            $.ajax({
+                type: "POST",
+                url: "/add_followed/",
+                data: {followed: + followed.id },
+                success: okey(followed),
+                dataType: JSON
+            });
+        }
+        function okey(followed)
+        {
+            console.log('geldi tipini siktiğin');
+            var out = $("#o"+followed.id).html();
+            if (out == "{{ follow_status.0 }}"){
+            $("#o"+followed.id).html("{{ follow_status.1 }}");
+            }else{
+            $("#o"+followed.id).html("{{ follow_status.0 }}");
+            }
+        }
+</script>
+{% endblock %}
